@@ -5,5 +5,5 @@ import (
 )
 
 type Handler interface {
-	Handle(data *dto.HttpData) dto.HttpResponse
+	Handle(data *dto.HTTPData) dto.HTTPResponse
 }

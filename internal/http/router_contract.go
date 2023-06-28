@@ -9,7 +9,7 @@ import (
 )
 
 // httpHandlerFunc is a contract http handler for router
-type httpHandlerFunc func(request *http.Request, handler httphandler.Handler, cfg *config.Config) dto.HttpResponse
+type httpHandlerFunc func(request *http.Request, handler httphandler.Handler, cfg *config.Config) dto.HTTPResponse
 
 // Router is a contract router and must implement this interface
 type Router interface {

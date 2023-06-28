@@ -13,14 +13,14 @@ import (
 	"runtime/debug"
 )
 
-func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws ...middleware.MiddlewareFunc) http.HandlerFunc {
+func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws ...middleware.Handle) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		defer func() {
 			err := recover()
 			if err != nil {
 				w.Header().Set(consts.HeaderContentTypeKey, consts.HeaderContentTypeJSON)
 				w.WriteHeader(http.StatusInternalServerError)
-				res := dto.HttpResponse{
+				res := dto.HTTPResponse{
 					Code:    http.StatusInternalServerError,
 					Message: `Something went wrong, please try again later`,
 				}
@@ -28,6 +28,7 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 				res.GenerateMessage()
 				logger.Error(logger.MessageFormat("error %v", string(debug.Stack())))
 				_ = json.NewEncoder(w).Encode(res)
+
 				return
 			}
 		}()
@@ -44,7 +45,7 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 		req = req.WithContext(ctx)
 
 		if err := middleware.FilterFunc(r.cfg, req, mdws); err != nil {
-			r.response(w, dto.HttpResponse{
+			r.response(w, dto.HTTPResponse{
 				Lang:   lang,
 				Errors: err,
 			})
@@ -58,7 +59,7 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 	}
 }
 
-func (r *router) response(w http.ResponseWriter, resp dto.HttpResponse) {
+func (r *router) response(w http.ResponseWriter, resp dto.HTTPResponse) {
 	if resp.IsStream() {
 		w.Header().Set(consts.HeaderContentTypeKey, resp.ContentType())
 
@@ -67,7 +68,6 @@ func (r *router) response(w http.ResponseWriter, resp dto.HttpResponse) {
 			w.WriteHeader(resp.GetCode())
 			_, _ = w.Write(resp.DataStream())
 		}()
-		return
 	}
 
 	w.Header().Set(consts.HeaderContentTypeKey, consts.HeaderContentTypeJSON)
@@ -77,8 +77,6 @@ func (r *router) response(w http.ResponseWriter, resp dto.HttpResponse) {
 		w.WriteHeader(resp.GetCode())
 		_ = json.NewEncoder(w).Encode(resp)
 	}()
-
-	return
 }
 
 func (r *router) defaultLang(lang string) string {

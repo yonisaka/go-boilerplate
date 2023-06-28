@@ -6,11 +6,11 @@ import (
 	"github.com/yonisaka/go-boilerplate/pkg/msg"
 )
 
-var rsp *HttpResponse
+var rsp *HTTPResponse
 var oneRsp sync.Once
 
-// HttpResponse presentation contract object
-type HttpResponse struct {
+// HTTPResponse presentation contract object
+type HTTPResponse struct {
 	Code              int         `json:"code"`
 	Message           interface{} `json:"message,omitempty"`
 	Errors            interface{} `json:"errors,omitempty"`
@@ -36,101 +36,102 @@ type MetaDataWithCount struct {
 }
 
 // GetCode method to transform response name var to http status
-func (r *HttpResponse) GetCode() int {
+func (r *HTTPResponse) GetCode() int {
 	return msg.GetCode(r.Code)
 }
 
 // GetMessage method to transform response name var to message detail
-func (r *HttpResponse) GetMessage() string {
+func (r *HTTPResponse) GetMessage() string {
 	return msg.Get(r.Code, r.Lang)
 }
 
 // GenerateMessage setter message
-func (r *HttpResponse) GenerateMessage() {
+func (r *HTTPResponse) GenerateMessage() {
 	if r.Message == nil {
 		r.Message = msg.Get(r.Code, r.Lang)
 	}
 }
 
 // WithCode setter response var name
-func (r *HttpResponse) WithCode(c int) *HttpResponse {
+func (r *HTTPResponse) WithCode(c int) *HTTPResponse {
 	r.Code = c
 	return r
 }
 
 // WithData setter data response
-func (r *HttpResponse) WithData(v interface{}) *HttpResponse {
+func (r *HTTPResponse) WithData(v interface{}) *HTTPResponse {
 	r.Data = v
 	return r
 }
 
 // WithError setter error messages
-func (r *HttpResponse) WithError(v interface{}) *HttpResponse {
+func (r *HTTPResponse) WithError(v interface{}) *HTTPResponse {
 	r.Errors = v
 	return r
 }
 
 // WithMeta setter meta data response
-func (r *HttpResponse) WithMeta(v interface{}) *HttpResponse {
+func (r *HTTPResponse) WithMeta(v interface{}) *HTTPResponse {
 	r.Meta = v
 	return r
 }
 
 // WithMessage setter custom message response
-func (r *HttpResponse) WithMessage(v interface{}) *HttpResponse {
+func (r *HTTPResponse) WithMessage(v interface{}) *HTTPResponse {
 	if v != nil {
 		r.Message = v
 	}
+
 	return r
 }
 
-func (r *HttpResponse) Error() *HttpResponse {
+func (r *HTTPResponse) Error() *HTTPResponse {
 	r.Code = 500
 	return r
 }
 
-func (r *HttpResponse) NotFound() *HttpResponse {
+func (r *HTTPResponse) NotFound() *HTTPResponse {
 	r.Code = 404
 	return r
 }
 
-func (r *HttpResponse) Success() *HttpResponse {
+func (r *HTTPResponse) Success() *HTTPResponse {
 	r.Code = 200
 	return r
 }
 
 // WithIsStream setter custom hash response
-func (r *HttpResponse) WithIsStream(v bool) *HttpResponse {
+func (r *HTTPResponse) WithIsStream(v bool) *HTTPResponse {
 	r.isStream = v
 	return r
 }
 
-func (r *HttpResponse) WithStreamData(v []byte) *HttpResponse {
+func (r *HTTPResponse) WithStreamData(v []byte) *HTTPResponse {
 	r.dataStream = v
 	return r
 }
 
-func (r *HttpResponse) WithContentType(v string) *HttpResponse {
+func (r *HTTPResponse) WithContentType(v string) *HTTPResponse {
 	r.streamContentType = v
 	return r
 }
 
-func (r *HttpResponse) ContentType() string {
+func (r *HTTPResponse) ContentType() string {
 	return r.streamContentType
 }
 
-func (r *HttpResponse) IsStream() bool {
+func (r *HTTPResponse) IsStream() bool {
 	return r.isStream
 }
 
-func (r *HttpResponse) DataStream() []byte {
+func (r *HTTPResponse) DataStream() []byte {
 	return r.dataStream
 }
 
 // NewResponse initialize response
-func NewResponse() *HttpResponse {
+func NewResponse() *HTTPResponse {
 	oneRsp.Do(func() {
-		rsp = &HttpResponse{}
+		rsp = &HTTPResponse{}
 	})
 
 	// clone response

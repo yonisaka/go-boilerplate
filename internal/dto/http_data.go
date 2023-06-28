@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-type HttpData struct {
+type HTTPData struct {
 	Request     *http.Request
 	Config      *config.Config
 	ServiceType string

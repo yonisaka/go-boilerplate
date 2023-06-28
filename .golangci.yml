@@ -1,0 +1,50 @@
+# https://golangci-lint.run/usage/configuration/
+run:
+  skip-files:
+    - ".*_mock\\.go"
+  skip-dirs:
+    - api/go
+  tests: false
+  deadline: 5m
+  print-resources-usage: true
+
+linters:
+  enable-all: true
+  disable:
+    - cyclop           # checks function and package cyclomatic complexity.
+    - dupl             # Tool for code clone detection [fast: true, auto-fix: false]
+    - errorlint        # errorlint is a linter for that can be used to find code that will cause problems with the error wrapping scheme introduced in Go 1.13.
+    - exhaustive       # check exhaustiveness of enum switch statements.
+    - exhaustivestruct # Checks if all struct's fields are initialized.
+    - exhaustruct      # Checks if all structure fields are initialized
+    - forcetypeassert  # finds forced type assertions.
+    - gci              # Gci control golang package import order and make it always deterministic.
+    - gochecknoglobals # Checks that no globals are present in Go code [fast: true, auto-fix: false]
+    - gocritic         # Provides many diagnostics that check for bugs, performance and style issues.
+    - godox            # Tool for detection of FIXME, TODO and other comment keywords [fast: true, auto-fix: false]
+    - godot            # Check if comments end in a period.
+    - goerr113         # Golang linter to check the errors handling expressions.
+    - gofumpt          # Gofumpt checks whether code was gofumpt-ed.
+    - gomnd            # An analyzer to detect magic numbers. [fast: true, auto-fix: false]
+    - gosec            # Inspects source code for security problems.
+    - ifshort          # Checks that your code uses short syntax for if-statements whenever possible.
+    - interfacer       # Linter that suggests narrower interface types [fast: true, auto-fix: false]
+    - ireturn          # Accept Interfaces, Return Concrete Types
+    - nilerr           # Finds the code that returns nil even if it checks that the error is not nil.
+    - nlreturn         # nlreturn checks for a new line before return and branch statements to increase code clarity.
+    - nosnakecase      # Detects snake case of variable naming and function name. Disabled because of protobuf generated code
+    - revive           # (Important) Fast, configurable, extensible, flexible, and beautiful linter for Go. Drop-in replacement of golint.
+    - stylecheck       # Stylecheck is a replacement for golint.
+    - tagliatelle      # Checks the struct tags.
+    - wrapcheck        # Checks that errors returned from external packages are wrapped.
+    - varnamelen       # Check the input of parameter has the short length or not.
+    - deadcode         # Finds unused code.
+    - depguard         # Depguard is a linter that helps you keep your package dependencies tidy.
+
+linters-settings:
+  govet:
+    # https://github.com/golangci/golangci-lint/issues/484
+    # report about shadowed variables
+    check-shadowing: false
+  lll:
+    line-length: 150

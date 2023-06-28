@@ -14,10 +14,7 @@ type router struct {
 
 func NewRouter() Router {
 	cfg := di.GetConfig()
-	return &router{
-		cfg:    cfg,
-		router: routerkit.NewRouter(routerkit.WithServiceName(cfg.App.Name)),
-	}
+	return &router{cfg: cfg, router: routerkit.NewRouter(routerkit.WithServiceName(cfg.App.Name))}
 }
 
 func (r *router) Route() *routerkit.Router {

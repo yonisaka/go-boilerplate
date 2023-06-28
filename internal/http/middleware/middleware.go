@@ -5,11 +5,11 @@ import (
 	"net/http"
 )
 
-// MiddlewareFunc is contract for middleware and must implement this type for http if need middleware http request
-type MiddlewareFunc func(r *http.Request, conf *config.Config) error
+// Handle is contract for middleware and must implement this type for http if need middleware http request
+type Handle func(r *http.Request, conf *config.Config) error
 
 // FilterFunc is a iterator resolver in each middleware registered
-func FilterFunc(conf *config.Config, r *http.Request, mfs []MiddlewareFunc) error {
+func FilterFunc(conf *config.Config, r *http.Request, mfs []Handle) error {
 	for _, mf := range mfs {
 		if err := mf(r, conf); err != nil {
 			return err

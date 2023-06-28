@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func httpRequest(request *http.Request, handler httphandler.Handler, conf *config.Config) dto.HttpResponse {
+func httpRequest(request *http.Request, handler httphandler.Handler, conf *config.Config) dto.HTTPResponse {
 	if !msg.GetAvailableLang(200, request.Header.Get(consts.HeaderLanguageKey)) {
 		request.Header.Set(consts.HeaderLanguageKey, conf.App.DefaultLang)
 	}
@@ -19,7 +19,7 @@ func httpRequest(request *http.Request, handler httphandler.Handler, conf *confi
 
 	req := request.WithContext(ctx)
 
-	data := &dto.HttpData{
+	data := &dto.HTTPData{
 		Request:     req,
 		Config:      conf,
 		ServiceType: consts.ServiceTypeHTTP,

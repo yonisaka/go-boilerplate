@@ -13,7 +13,7 @@ func NewHealthHandler() Handler {
 	return &healthHandler{}
 }
 
-func (h *healthHandler) Handle(data *dto.HttpData) dto.HttpResponse {
+func (h *healthHandler) Handle(data *dto.HTTPData) dto.HTTPResponse {
 	logger.Info(logger.MessageFormat("health.check"), logger.EventName("health.check"))
 
 	return *dto.NewResponse().WithCode(http.StatusOK).WithMessage("OK")

@@ -6,6 +6,7 @@ on:
 env:
   GCE_INSTANCE: dev-instance
   GCE_INSTANCE_ZONE: asia-southeast2-a
+  GCE_PROJECT_ID: ${{ secrets.GCE_CREDENTIALS }}
 
 jobs:
   cd:
@@ -30,11 +31,20 @@ jobs:
 #        with:
 #          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
+      - name: Build
+        run: go build -o go-boilerplate main.go
+
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           service_account_key: ${{ secrets.GCE_CREDENTIALS }}
 
+      - name: Update Service
+        run: gcloud compute scp --zone=$GCE_INSTANCE_ZONE ./go-boilerplate $GCE_INSTANCE:~
+
       - name: Deploy Service
         run: |
-          gcloud compute ssh --zone=$GCE_INSTANCE_ZONE $GCE_INSTANCE --command "fuser -k 8080/tcp || true; cd ~/; nohup ./api > /dev/null 2>&1 &"
+          gcloud compute ssh $GCE_INSTANCE \
+          --project=$GCE_PROJECT_ID \
+          --zone=$GCE_INSTANCE_ZONE \
+          --command "fuser -k 8080/tcp || true; cd ~/; nohup ./api > /dev/null 2>&1 &"

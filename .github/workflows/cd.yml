@@ -26,18 +26,16 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-golang-
 
-#      - name: Set up Cloud Authentication
-#        uses: google-github-actions/auth@v1
-#        with:
-#          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+      - name: Set up Cloud Authentication
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: Build
         run: go build -o go-boilerplate main.go
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
-        with:
-          service_account_key: ${{ secrets.GCE_CREDENTIALS }}
 
       - name: Update Service
         run: gcloud compute scp --zone=$GCE_INSTANCE_ZONE ./go-boilerplate $GCE_INSTANCE:~

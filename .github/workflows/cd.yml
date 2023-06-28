@@ -25,6 +25,15 @@ jobs:
           key: ${{ runner.os }}-golang-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-golang-
+
+      - name: Auth to GCE
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
       - name: Deploy Service
         run: |
           gcloud compute ssh --zone=$GCE_INSTANCE_ZONE $GCE_INSTANCE --command "fuser -k 8080/tcp || true; cd ~/; nohup ./api > /dev/null 2>&1 &"

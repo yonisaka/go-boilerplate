@@ -4,7 +4,6 @@ on:
   workflow_call:
 
 env:
-  GCE_CREDENTIALS: ${{ secrets.GCE_CREDENTIALS }}
   GCE_INSTANCE: dev-instance
   GCE_INSTANCE_ZONE: asia-southeast2-a
 
@@ -29,7 +28,7 @@ jobs:
       - name: Set up Cloud Authentication
         uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: '$GCE_CREDENTIALS'
+          credentials_json: '${{ secrets.GCE_CREDENTIALS }}'
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1

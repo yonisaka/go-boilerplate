@@ -4,6 +4,7 @@ on:
   workflow_call:
 
 env:
+  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
   GCE_INSTANCE: dev-instance
   GCE_INSTANCE_ZONE: asia-southeast2-a

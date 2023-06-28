@@ -26,10 +26,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-golang-
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
+      - name: Set up Cloud Authentication
+        uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
 
       - name: Deploy Service
         run: |

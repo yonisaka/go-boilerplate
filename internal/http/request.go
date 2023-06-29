@@ -19,11 +19,5 @@ func httpRequest(request *http.Request, handler httphandler.Handler, conf *confi
 
 	req := request.WithContext(ctx)
 
-	data := &dto.HTTPData{
-		Request:     req,
-		Config:      conf,
-		ServiceType: consts.ServiceTypeHTTP,
-	}
-
-	return handler.Handle(data)
+	return handler.Handle(req)
 }

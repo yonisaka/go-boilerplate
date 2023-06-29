@@ -2,6 +2,8 @@ name: CD Workflow
 
 on:
   workflow_call:
+    credentials_json:
+      secrets: [GCE_CREDENTIALS]
 
 env:
   GCE_INSTANCE: dev-instance

@@ -2,9 +2,6 @@ name: CD Workflow
 
 on:
   workflow_call:
-    secrets:
-      GCE_CREDENTIALS:
-        required: true
 
 env:
   GCE_INSTANCE: dev-instance

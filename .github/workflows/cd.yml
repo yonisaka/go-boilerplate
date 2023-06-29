@@ -6,7 +6,7 @@ on:
 env:
   GCE_INSTANCE: dev-instance
   GCE_INSTANCE_ZONE: asia-southeast2-a
-  GCE_PROJECT_ID: ${{ secrets.GCE_CREDENTIALS }}
+  GCE_PROJECT_ID: ${{ secrets.GCE_PROJECT_ID }}
 
 jobs:
   cd:
@@ -29,7 +29,7 @@ jobs:
       - name: Set up Cloud Authentication
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: '${{ secrets.GCE_CREDENTIALS }}'
+          credentials_json: ${{ secrets.GCE_CREDENTIALS }}
 
       - name: Build
         run: go build -o go-boilerplate main.go

@@ -31,8 +31,10 @@ jobs:
 
       - name: 'Authenticate to Google Cloud'
         uses: google-github-actions/auth@v0.4.0
+        env:
+          GCE_CREDENTIALS: ${{ secrets.GCE_CREDENTIALS }}
         with:
-          credentials_json: ${{ secrets.GCE_CREDENTIALS }}
+          credentials_json: ${{ env.GCE_CREDENTIALS }}
 
       - name: Build
         run: go build -o go-boilerplate main.go

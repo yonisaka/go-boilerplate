@@ -1,6 +1,6 @@
 GOPATH=$(shell go env GOPATH)
 
-GOLANGCI_LINT_VERSION=v1.51.1
+GOLANGCI_LINT_VERSION=v1.53.3
 
 install: install-gomock install-linter
 

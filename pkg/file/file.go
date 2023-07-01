@@ -1,8 +1,9 @@
 package file
 
 import (
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
+
+	"gopkg.in/yaml.v3"
 )
 
 // ReadFromYAML reads the YAML file and pass to the object
@@ -19,5 +20,8 @@ func ReadFromYAML(path string, target interface{}) error {
 	if err != nil {
 		return err
 	}
-	return yaml.Unmarshal(yf, target)
+	return yaml.Unmarshal(
+		yf,
+		target,
+	)
 }

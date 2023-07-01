@@ -39,6 +39,8 @@ linters:
     - wrapcheck        # Checks that errors returned from external packages are wrapped.
     - varnamelen       # Check the input of parameter has the short length or not.
     - depguard         # Depguard is a linter that helps you keep your package dependencies tidy.
+    - staticcheck     # Staticcheck is a state of the art linter for Go, meant to provide a composable set of orthogonal checks.
+    - deadcode       # Finds unused code.
 
 linters-settings:
   govet:

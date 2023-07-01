@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io"
 	"os"
 	"strings"
 	"text/template"
+
+	"gopkg.in/yaml.v3"
 )
 
 type Translator interface {
@@ -33,8 +34,8 @@ func (t *translator) loadLocalesFile(filepath string) (map[string]string, error)
 		return nil, err
 	}
 
-	any := make(map[string]interface{})
-	err = yaml.Unmarshal(buf.Bytes(), &any)
+	anyLocale := make(map[string]interface{})
+	err = yaml.Unmarshal(buf.Bytes(), &anyLocale)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +43,7 @@ func (t *translator) loadLocalesFile(filepath string) (map[string]string, error)
 	l := langFromFilename(f.Name())
 	t.langs = append(t.langs, l)
 
-	return withLanguageName(l, flatten(any)), nil
+	return withLanguageName(l, flatten(anyLocale)), nil
 }
 
 func langFromFilename(name string) string {

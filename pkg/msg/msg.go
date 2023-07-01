@@ -2,10 +2,11 @@ package msg
 
 import (
 	"fmt"
-	"github.com/yonisaka/go-boilerplate/pkg/file"
 	"net/http"
 	"strings"
 	"sync"
+
+	"github.com/yonisaka/go-boilerplate/pkg/file"
 )
 
 var msgs map[int]*Message
@@ -50,8 +51,11 @@ type Content struct {
 // returns:
 //
 //	err: operation error
-func Setup(fname string, paths ...string) (err error) {
-	var mcfg MessageConfig
+func Setup(fname string, paths ...string) error {
+	var (
+		mcfg MessageConfig
+		err  error
+	)
 	once.Do(func() {
 		msgs = make(map[int]*Message, 0)
 		for _, p := range paths {
@@ -66,7 +70,7 @@ func Setup(fname string, paths ...string) (err error) {
 
 	if err != nil {
 		err = fmt.Errorf("unable to read config from files %s", err.Error())
-		return
+		return err
 	}
 	for _, m := range mcfg.Messages {
 		if _, ok := msgs[m.Code]; !ok {
@@ -74,7 +78,7 @@ func Setup(fname string, paths ...string) (err error) {
 			msgs[m.Code] = m.doMap()
 		}
 	}
-	return
+	return nil
 }
 
 // Get messages by language

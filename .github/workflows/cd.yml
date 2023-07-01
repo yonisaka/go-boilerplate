@@ -15,8 +15,8 @@ env:
 
 jobs:
   deployment:
-    name: Continuous Deployment
-    runs-on: ubuntu-latest
+    name: GCE
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-go@v3

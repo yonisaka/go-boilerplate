@@ -18,3 +18,4 @@ jobs:
     uses: './.github/workflows/cd.yml'
     secrets:
       GCE_CREDENTIALS: ${{ secrets.GCE_CREDENTIALS }}
+      GCE_PROJECT_ID: ${{ secrets.GCE_PROJECT_ID }}

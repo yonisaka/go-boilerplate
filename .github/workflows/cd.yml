@@ -5,10 +5,13 @@ on:
     secrets:
       GCE_CREDENTIALS:
         required: true
+      GCE_PROJECT_ID:
+        required: true
 
 env:
   GCE_INSTANCE: dev-instance
   GCE_INSTANCE_ZONE: asia-southeast2-a
+  GCE_PROJECT_ID: ${{ secrets.GCE_PROJECT_ID }}
 
 jobs:
   deployment:
@@ -32,7 +35,6 @@ jobs:
         uses: google-github-actions/auth@v0.4.0
         with:
           credentials_json: ${{ secrets.GCE_CREDENTIALS }}
-          service_account: ${{ secrets.GCE_CREDENTIALS }}
 
       - name: Build
         run: go build -o go-boilerplate main.go

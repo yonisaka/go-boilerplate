@@ -34,6 +34,7 @@ func (m *Message) doMap() *Message {
 			continue
 		}
 	}
+
 	return m
 }
 
@@ -56,6 +57,7 @@ func Setup(fname string, paths ...string) error {
 		mcfg MessageConfig
 		err  error
 	)
+
 	once.Do(func() {
 		msgs = make(map[int]*Message, 0)
 		for _, p := range paths {
@@ -72,25 +74,28 @@ func Setup(fname string, paths ...string) error {
 		err = fmt.Errorf("unable to read config from files %s", err.Error())
 		return err
 	}
+
 	for _, m := range mcfg.Messages {
 		if _, ok := msgs[m.Code]; !ok {
 			m := &Message{Code: m.Code, Contents: m.Contents}
 			msgs[m.Code] = m.doMap()
 		}
 	}
+
 	return nil
 }
 
 // Get messages by language
-func Get(code int, lang string) (text string) {
+func Get(code int, lang string) string {
+	var text string
 	lang = cleanLangStr(lang)
 	if m, ok := msgs[code]; ok {
 		if c, ok := m.contents[lang]; ok {
 			text = c.Text
-			return
+			return text
 		}
 	}
-	return
+	return text
 }
 
 // GetCode messages by language
@@ -98,22 +103,27 @@ func GetCode(code int) int {
 	if m, ok := msgs[code]; ok {
 		return m.Code
 	}
+
 	return http.StatusUnprocessableEntity
 }
 
 // GetMessageCode messages by language
-func GetMessageCode(key int, lang string) (code int, text string) {
-	lang = cleanLangStr(lang)
-	if m, ok := msgs[key]; ok {
+func GetMessageCode(key int, lang string) (int, string) {
+	var (
+		code int
+		text string
+	)
+	cleanLang := cleanLangStr(lang)
+	if m, ok := msgs[key]; ok { //nolint:wsl
 		code = m.Code
-		if c, ok := m.contents[lang]; ok {
+		if c, ok := m.contents[cleanLang]; ok { //nolint:wsl
 			text = c.Text
-			return
+			return code, text
 		}
 	}
 
 	code = http.StatusUnprocessableEntity
-	return
+	return code, text
 }
 
 func cleanLangStr(s string) string {

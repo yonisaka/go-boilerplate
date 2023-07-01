@@ -1,8 +1,9 @@
 package locales
 
 import (
-	"golang.org/x/text/language"
 	"strings"
+
+	"golang.org/x/text/language"
 )
 
 func ParseIOSLang(in string, def string) string {

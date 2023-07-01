@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"time"
+
+	"github.com/yonisaka/go-boilerplate/pkg/logger"
 )
 
 type closer struct {
@@ -65,7 +67,7 @@ func CloseAll() {
 func RegisterCloser(key string, closer io.Closer) {
 	for _, c := range closerFuncs {
 		if key == c.key {
-			log.Fatal(fmt.Sprintf("duplicate closer key: %s", key))
+			logger.Error("closer is already registered", logger.String("key", key))
 		}
 	}
 
@@ -74,5 +76,5 @@ func RegisterCloser(key string, closer io.Closer) {
 		closer: closer,
 	})
 
-	log.Println(fmt.Sprintf("%s closer is registered", key))
+	logger.Info("closer registered", logger.String("key", key))
 }

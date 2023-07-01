@@ -3,9 +3,9 @@ package logger
 import (
 	"context"
 	"fmt"
-	"github.com/yonisaka/go-boilerplate/pkg/util"
 
 	"github.com/sirupsen/logrus"
+	"github.com/yonisaka/go-boilerplate/pkg/util"
 )
 
 var (
@@ -95,7 +95,6 @@ func Error(arg interface{}, fl ...Field) {
 			EventKey: extract(fl...),
 		}),
 	).Error(arg)
-
 }
 
 func Info(arg interface{}, fl ...Field) {

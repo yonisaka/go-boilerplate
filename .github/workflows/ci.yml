@@ -11,5 +11,8 @@ jobs:
     uses: './.github/workflows/lint.yml'
   test:
     uses: './.github/workflows/test.yml'
-  cd:
+  deployment:
+    needs:
+      - lint
+      - test
     uses: './.github/workflows/cd.yml'

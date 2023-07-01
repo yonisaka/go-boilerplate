@@ -9,7 +9,7 @@ env:
   GCE_PROJECT_ID: ${{ secrets.GCE_PROJECT_ID }}
 
 jobs:
-  cd:
+  deployment:
     name: Continuous Deployment
     runs-on: ubuntu-latest
     steps:

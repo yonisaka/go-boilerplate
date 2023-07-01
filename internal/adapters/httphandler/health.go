@@ -1,9 +1,10 @@
 package httphandler
 
 import (
+	"net/http"
+
 	"github.com/yonisaka/go-boilerplate/internal/dto"
 	"github.com/yonisaka/go-boilerplate/pkg/logger"
-	"net/http"
 )
 
 type healthHandler struct {

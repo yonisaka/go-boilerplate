@@ -1,10 +1,10 @@
-package http
+package di
 
 import (
-	"github.com/yonisaka/go-boilerplate/config"
-	"github.com/yonisaka/go-boilerplate/internal/di"
-	"github.com/yonisaka/go-boilerplate/pkg/routerkit"
 	"net/http"
+
+	"github.com/yonisaka/go-boilerplate/config"
+	"github.com/yonisaka/go-boilerplate/pkg/routerkit"
 )
 
 type router struct {
@@ -13,17 +13,17 @@ type router struct {
 }
 
 func NewRouter() Router {
-	cfg := di.GetConfig()
+	cfg := GetConfig()
 	return &router{cfg: cfg, router: routerkit.NewRouter(routerkit.WithServiceName(cfg.App.Name))}
 }
 
 func (r *router) Route() *routerkit.Router {
 	root := r.router.PathPrefix("/").Subrouter()
 
-	healthHandler := di.GetHealthHandler()
+	healthHandler := GetHealthHandler()
 
 	root.HandleFunc("/liveness", r.handle(
-		httpRequest,
+		httpGateway,
 		healthHandler,
 	)).Methods(http.MethodGet)
 

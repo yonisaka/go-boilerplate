@@ -1,18 +1,19 @@
-package http
+package di
 
 import (
 	"context"
-	"github.com/yonisaka/go-boilerplate/config"
+	"net/http"
+
 	"github.com/yonisaka/go-boilerplate/internal/adapters/httphandler"
 	"github.com/yonisaka/go-boilerplate/internal/consts"
 	"github.com/yonisaka/go-boilerplate/internal/dto"
 	"github.com/yonisaka/go-boilerplate/pkg/msg"
-	"net/http"
 )
 
-func httpRequest(request *http.Request, handler httphandler.Handler, conf *config.Config) dto.HTTPResponse {
+func httpGateway(request *http.Request, handler httphandler.Handler) dto.HTTPResponse {
+	cfg := GetConfig()
 	if !msg.GetAvailableLang(200, request.Header.Get(consts.HeaderLanguageKey)) {
-		request.Header.Set(consts.HeaderLanguageKey, conf.App.DefaultLang)
+		request.Header.Set(consts.HeaderLanguageKey, cfg.App.DefaultLang)
 	}
 
 	ctx := context.WithValue(request.Context(), consts.CtxLang, request.Header.Get(consts.HeaderLanguageKey))

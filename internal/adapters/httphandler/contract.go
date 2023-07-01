@@ -1,8 +1,9 @@
 package httphandler
 
 import (
-	"github.com/yonisaka/go-boilerplate/internal/dto"
 	"net/http"
+
+	"github.com/yonisaka/go-boilerplate/internal/dto"
 )
 
 type Handler interface {

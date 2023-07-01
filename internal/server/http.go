@@ -3,12 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/yonisaka/go-boilerplate/internal/consts"
-	"github.com/yonisaka/go-boilerplate/internal/di"
-	internalHttp "github.com/yonisaka/go-boilerplate/internal/http"
-	"github.com/yonisaka/go-boilerplate/pkg/logger"
 	"net/http"
 	"time"
+
+	"github.com/yonisaka/go-boilerplate/internal/consts"
+	"github.com/yonisaka/go-boilerplate/internal/di"
+	"github.com/yonisaka/go-boilerplate/pkg/logger"
 )
 
 type httpServer struct {
@@ -26,7 +26,7 @@ func (h *httpServer) Run() error {
 
 	cfg := di.GetConfig()
 
-	router := internalHttp.NewRouter()
+	router := di.NewRouter()
 
 	server := http.Server{
 		Addr:         fmt.Sprintf("0.0.0.0:%d", cfg.App.Port),

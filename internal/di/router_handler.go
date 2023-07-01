@@ -1,16 +1,16 @@
-package http
+package di
 
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+
 	"github.com/yonisaka/go-boilerplate/internal/adapters/httphandler"
 	"github.com/yonisaka/go-boilerplate/internal/consts"
 	"github.com/yonisaka/go-boilerplate/internal/dto"
-	"github.com/yonisaka/go-boilerplate/internal/http/middleware"
+	"github.com/yonisaka/go-boilerplate/internal/middleware"
 	"github.com/yonisaka/go-boilerplate/pkg/locales"
 	"github.com/yonisaka/go-boilerplate/pkg/logger"
-	"net/http"
-	"runtime/debug"
 )
 
 func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws ...middleware.Handle) http.HandlerFunc {
@@ -25,15 +25,17 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 					Message: `Something went wrong, please try again later`,
 				}
 
-				res.GenerateMessage()
-				logger.Error(logger.MessageFormat("error %v", string(debug.Stack())))
-				_ = json.NewEncoder(w).Encode(res)
+				func() {
+					res.GenerateMessage()
+					w.WriteHeader(res.GetCode())
+					_ = json.NewEncoder(w).Encode(res)
+				}()
 
 				return
 			}
 		}()
 
-		ctx := context.WithValue(req.Context(), "access", map[string]interface{}{
+		ctx := context.WithValue(req.Context(), consts.CtxAccess, map[string]interface{}{
 			"path":      req.URL.Path,
 			"remote_ip": req.RemoteAddr,
 			"method":    req.Method,
@@ -44,7 +46,7 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 		ctx = locales.WithAcceptLanguage(ctx, lang)
 		req = req.WithContext(ctx)
 
-		if err := middleware.FilterFunc(r.cfg, req, mdws); err != nil {
+		if err := middleware.FilterFunc(req, mdws); err != nil {
 			r.response(w, dto.HTTPResponse{
 				Lang:   lang,
 				Errors: err,
@@ -53,7 +55,7 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 			return
 		}
 
-		resp := hfn(req, handler, r.cfg)
+		resp := hfn(req, handler)
 		resp.Lang = lang
 		r.response(w, resp)
 	}
@@ -68,15 +70,19 @@ func (r *router) response(w http.ResponseWriter, resp dto.HTTPResponse) {
 			w.WriteHeader(resp.GetCode())
 			_, _ = w.Write(resp.DataStream())
 		}()
+	} else {
+		w.Header().Set(consts.HeaderContentTypeKey, consts.HeaderContentTypeJSON)
+
+		defer func() {
+			func() {
+				resp.GenerateMessage()
+				w.WriteHeader(resp.GetCode())
+				if err := json.NewEncoder(w).Encode(resp); err != nil {
+					logger.Error(logger.MessageFormat("error %v", err))
+				}
+			}()
+		}()
 	}
-
-	w.Header().Set(consts.HeaderContentTypeKey, consts.HeaderContentTypeJSON)
-
-	defer func() {
-		resp.GenerateMessage()
-		w.WriteHeader(resp.GetCode())
-		_ = json.NewEncoder(w).Encode(resp)
-	}()
 }
 
 func (r *router) defaultLang(lang string) string {

@@ -130,7 +130,7 @@ func getCaller() *runtime.Frame {
 
 		// If the caller isn't part of this package, we're done
 		if !(pkg == logrusPackage || pkg == lpkg) {
-			return &f //nolint:scopelint
+			return &f
 		}
 	}
 

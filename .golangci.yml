@@ -38,7 +38,6 @@ linters:
     - tagliatelle      # Checks the struct tags.
     - wrapcheck        # Checks that errors returned from external packages are wrapped.
     - varnamelen       # Check the input of parameter has the short length or not.
-    - deadcode         # Finds unused code.
     - depguard         # Depguard is a linter that helps you keep your package dependencies tidy.
 
 linters-settings:

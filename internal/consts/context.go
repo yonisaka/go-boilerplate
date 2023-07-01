@@ -1,8 +1,11 @@
 package consts
 
+type contextIntKey int
+type contextStringKey string
+
 const (
 	// CtxUserCode const
-	CtxUserCode = iota
+	CtxUserCode contextIntKey = iota
 	// CtxUserEmail const
 	CtxUserEmail
 	// CtxUserPhone const
@@ -17,4 +20,9 @@ const (
 	CtxUserInfo
 	// CtxAuthInfo auth context key
 	CtxAuthInfo
+)
+
+const (
+	// CtxAccess const
+	CtxAccess contextStringKey = "access"
 )

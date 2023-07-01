@@ -3,8 +3,8 @@ package cmd
 import (
 	"github.com/urfave/cli/v2"
 	"github.com/yonisaka/go-boilerplate/internal/consts"
+	"github.com/yonisaka/go-boilerplate/internal/server"
 	"github.com/yonisaka/go-boilerplate/pkg/logger"
-	"github.com/yonisaka/go-boilerplate/pkg/server"
 )
 
 // httpStart is a method to start http server

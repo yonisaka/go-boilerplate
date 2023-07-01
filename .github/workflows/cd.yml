@@ -37,7 +37,7 @@ jobs:
           credentials_json: ${{ secrets.GCE_CREDENTIALS }}
 
       - name: Build
-        run: go build -o go-boilerplate main.go
+        run: CGO_ENABLED=0 go build -o go-boilerplate main.go
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1

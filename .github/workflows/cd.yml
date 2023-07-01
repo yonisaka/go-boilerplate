@@ -9,7 +9,7 @@ on:
         required: true
 
 env:
-  GCE_INSTANCE: dev-instance
+  GCE_INSTANCE: dev-boilerplate
   GCE_INSTANCE_ZONE: asia-southeast2-a
   GCE_PROJECT_ID: ${{ secrets.GCE_PROJECT_ID }}
 

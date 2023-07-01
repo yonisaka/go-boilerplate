@@ -16,3 +16,5 @@ jobs:
       - lint
       - test
     uses: './.github/workflows/cd.yml'
+    secrets:
+      GCE_CREDENTIALS: ${{ secrets.GCE_CREDENTIALS }}

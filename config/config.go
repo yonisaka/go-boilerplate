@@ -7,7 +7,9 @@ import (
 
 type (
 	Config struct {
-		App App
+		App      App
+		MasterDB DB
+		SlaveDB  DB
 	}
 
 	App struct {
@@ -17,6 +19,14 @@ type (
 		DefaultLang  string
 		ReadTimeout  int
 		WriteTimeout int
+	}
+
+	DB struct {
+		Host     string
+		Port     string
+		User     string
+		Password string
+		DB       string
 	}
 )
 
@@ -29,6 +39,20 @@ func New() *Config {
 			DefaultLang:  getEnv("APP_DEFAULT_LANG", "en"),
 			ReadTimeout:  getEnvAsInt("APP_READ_TIMEOUT", 10),
 			WriteTimeout: getEnvAsInt("APP_WRITE_TIMEOUT", 10),
+		},
+		MasterDB: DB{
+			Host:     getEnv("POSTGRES_HOST_MASTER", "localhost"),
+			Port:     getEnv("POSTGRES_PORT_MASTER", "5432"),
+			User:     getEnv("POSTGRES_USER_MASTER", "postgres"),
+			Password: getEnv("POSTGRES_PASSWORD_MASTER", "postgres"),
+			DB:       getEnv("POSTGRES_DB_MASTER", "postgres"),
+		},
+		SlaveDB: DB{
+			Host:     getEnv("POSTGRES_HOST_SLAVE", "localhost"),
+			Port:     getEnv("POSTGRES_PORT_SLAVE", "5432"),
+			User:     getEnv("POSTGRES_USER_SLAVE", "postgres"),
+			Password: getEnv("POSTGRES_PASSWORD_SLAVE", "postgres"),
+			DB:       getEnv("POSTGRES_DB_SLAVE", "postgres"),
 		},
 	}
 }

@@ -5,6 +5,8 @@ package usecases
 
 import (
 	"context"
+
+	"github.com/yonisaka/go-boilerplate/internal/entities/repository"
 )
 
 // HealthUsecase is an interface for health usecase
@@ -16,11 +18,15 @@ type HealthUsecase interface {
 var _ HealthUsecase = (*healthUsecase)(nil)
 
 // NewHealthUsecase is a constructor function for health usecase
-func NewHealthUsecase() HealthUsecase {
-	return &healthUsecase{}
+func NewHealthUsecase(
+	healthRepo repository.HealthRepo,
+) HealthUsecase {
+	return &healthUsecase{
+		healthRepo: healthRepo,
+	}
 }
 
 // healthUsecase is a struct for health usecase
 type healthUsecase struct {
-	// TODO: INJECT REPOSITORY HERE
+	healthRepo repository.HealthRepo
 }

@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"os"
-	"strconv"
 	"sync"
 
-	"github.com/yonisaka/go-boilerplate/pkg/di"
-
 	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/yonisaka/go-boilerplate/config"
+	"github.com/yonisaka/go-boilerplate/pkg/di"
 )
 
 var (
@@ -41,35 +39,23 @@ type BaseRepo struct {
 	dbSlave  *pgxpool.Pool
 }
 
-func getConnString(connType string) string {
-	envType := "_SLAVE"
-	portType := "5433"
-
-	if connType == "master" {
-		envType = "_MASTER"
-		portType = "5432"
-	}
-
-	if os.Getenv("APP_ENV") == "test" || os.Getenv("APP_ENV") == "" {
-		return fmt.Sprintf("postgres://test:test@localhost:%s/test?sslmode=disable", portType)
-	}
-
+func getConnString(cfg *config.DB) string {
 	return fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
-		os.Getenv("POSTGRES_USER"+envType),
-		os.Getenv("POSTGRES_PASSWORD"+envType),
-		os.Getenv("POSTGRES_HOST"+envType)+":"+os.Getenv("POSTGRES_PORT"+envType), // for lint purpose
-		os.Getenv("POSTGRES_DB"+envType),
+		cfg.User,
+		cfg.Password,
+		cfg.Host+":"+cfg.Port,
+		cfg.DB,
 	)
 }
 
 // GetDatabaseMaster returns postgresql Pool for Master.
-func GetDatabaseMaster() *pgxpool.Pool {
+func GetDatabaseMaster(cfg *config.DB) *pgxpool.Pool {
 	poolMasterOnce.Do(func() {
 		ctx := context.Background()
 
 		var err error
 
-		connString := getConnString("master")
+		connString := getConnString(cfg)
 
 		// Use default config.
 		poolMaster, err = pgxpool.New(ctx, connString)
@@ -93,22 +79,13 @@ func GetDatabaseMaster() *pgxpool.Pool {
 }
 
 // GetDatabaseSlave returns postgresql Pool for Slave.
-func GetDatabaseSlave() *pgxpool.Pool {
+func GetDatabaseSlave(cfg *config.DB) *pgxpool.Pool {
 	poolSlaveOnce.Do(func() {
 		ctx := context.Background()
 
 		var err error
 
-		isReplica, err := strconv.ParseBool(os.Getenv("IS_REPLICA"))
-		if err != nil {
-			log.Fatalf("failed to parse is replica: %v", err)
-		}
-
-		connString := getConnString("master")
-
-		if isReplica {
-			connString = getConnString("slave")
-		}
+		connString := getConnString(cfg)
 
 		// Use default config.
 		poolSlave, err = pgxpool.New(ctx, connString)

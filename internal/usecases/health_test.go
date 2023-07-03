@@ -32,7 +32,8 @@ func TestHealthUC_Liveness(t *testing.T) {
 				ctx: ctx,
 			}
 
-			want := "OK"
+			want := "Life is not about waiting for the storms to pass; " +
+				"it's about learning to dance in the rain and embracing every challenge as an opportunity for growth."
 
 			mockJourneyRepo := repository.NewGoMockHealthRepo(ctrl)
 			mockJourneyRepo.EXPECT().GetLiveness(args.ctx).Return(nil)

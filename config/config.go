@@ -23,7 +23,7 @@ type (
 
 	DB struct {
 		Host     string
-		Port     string
+		Port     int
 		User     string
 		Password string
 		DB       string
@@ -42,14 +42,14 @@ func New() *Config {
 		},
 		MasterDB: DB{
 			Host:     getEnv("POSTGRES_HOST_MASTER", "localhost"),
-			Port:     getEnv("POSTGRES_PORT_MASTER", "5432"),
+			Port:     getEnvAsInt("POSTGRES_PORT_MASTER", 5432),
 			User:     getEnv("POSTGRES_USER_MASTER", "postgres"),
 			Password: getEnv("POSTGRES_PASSWORD_MASTER", "postgres"),
 			DB:       getEnv("POSTGRES_DB_MASTER", "postgres"),
 		},
 		SlaveDB: DB{
 			Host:     getEnv("POSTGRES_HOST_SLAVE", "localhost"),
-			Port:     getEnv("POSTGRES_PORT_SLAVE", "5432"),
+			Port:     getEnvAsInt("POSTGRES_PORT_SLAVE", 5432),
 			User:     getEnv("POSTGRES_USER_SLAVE", "postgres"),
 			Password: getEnv("POSTGRES_PASSWORD_SLAVE", "postgres"),
 			DB:       getEnv("POSTGRES_DB_SLAVE", "postgres"),

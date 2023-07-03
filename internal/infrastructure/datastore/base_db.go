@@ -43,7 +43,7 @@ func getConnString(cfg *config.DB) string {
 	return fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
 		cfg.User,
 		cfg.Password,
-		cfg.Host+":"+cfg.Port,
+		fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		cfg.DB,
 	)
 }

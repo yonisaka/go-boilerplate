@@ -10,6 +10,7 @@ type (
 		App      App
 		MasterDB DB
 		SlaveDB  DB
+		Ws       Websocket
 	}
 
 	App struct {
@@ -27,6 +28,23 @@ type (
 		User     string
 		Password string
 		DB       string
+	}
+
+	Websocket struct {
+		Host string
+		Port int
+
+		RoomIDLength      int
+		MaxCachedMessages int
+		MaxMessageLength  int
+		Timeout           int
+		RateLimitInterval int
+		RateLimitMessages int
+		MaxRooms          int
+		MaxPeerPerRoom    int
+		PeerHandleFormat  string
+		RoomTimeout       int
+		RoomAge           int
 	}
 )
 
@@ -53,6 +71,21 @@ func New() *Config {
 			User:     getEnv("POSTGRES_USER_SLAVE", "postgres"),
 			Password: getEnv("POSTGRES_PASSWORD_SLAVE", "postgres"),
 			DB:       getEnv("POSTGRES_DB_SLAVE", "postgres"),
+		},
+		Ws: Websocket{
+			Host:              getEnv("WS_HOST", "localhost"),
+			Port:              getEnvAsInt("WS_PORT", 3000),
+			RoomIDLength:      getEnvAsInt("WS_ROOM_ID_LENGTH", 8),
+			MaxCachedMessages: getEnvAsInt("WS_MAX_CACHED_MESSAGES", 1000),
+			MaxMessageLength:  getEnvAsInt("WS_MAX_MESSAGE_LENGTH", 3000),
+			Timeout:           getEnvAsInt("WS_TIMEOUT", 3),
+			RateLimitInterval: getEnvAsInt("WS_RATE_LIMIT_INTERVAL", 3),
+			RateLimitMessages: getEnvAsInt("WS_RATE_LIMIT_MESSAGES", 25),
+			MaxRooms:          getEnvAsInt("WS_MAX_ROOMS", 100),
+			MaxPeerPerRoom:    getEnvAsInt("WS_MAX_PEER_PER_ROOM", 100),
+			PeerHandleFormat:  getEnv("WS_PEER_HANDLE_FORMAT", "Guest-%d"),
+			RoomTimeout:       getEnvAsInt("WS_ROOM_TIMEOUT", 10),
+			RoomAge:           getEnvAsInt("WS_ROOM_AGE", 24),
 		},
 	}
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/yonisaka/go-boilerplate/config"
 	"github.com/yonisaka/go-boilerplate/pkg/routerkit"
+	"github.com/yonisaka/go-boilerplate/pkg/ws"
 )
 
 type router struct {
@@ -26,6 +27,12 @@ func (r *router) Route() *routerkit.Router {
 		httpGateway,
 		healthHandler,
 	)).Methods(http.MethodGet)
+
+	hub := ws.NewHub(r.cfg)
+
+	root.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		ws.HandleWebsocket(hub, w, r)
+	}).Methods(http.MethodGet)
 
 	return r.router
 }
